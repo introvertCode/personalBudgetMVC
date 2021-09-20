@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %} Menu {% endblock %}
+{% block body %}
+
+    <div class="container-fluid">
+
+        <div class="container my-5" id="menu-left">
+
+            <div class="row">
+                <div class="text-center h2 mt-3"> MENU</div>
+            </div>
+
+
+            <div class="row gx-3 mt-2 mx-5">
+
+
+                <div class="col-md-6 mt-3 text-center">
+
+                    <a href="/BalanceManager/add" class="menu-ic">
+                        <div class="menu-ic p-4 rounded">
+                            <i class="icon-chart-area"></i>
+                            <div>Przeglądaj bilans</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-6 mt-3 text-center ">
+
+                    <a href="/ExpenseManager" class="menu-ic">
+                        <div class="menu-ic  p-4 rounded">
+                            <i class="icon-minus"></i>
+                            <div>Dodaj wydatek</div>
+                        </div>
+                    </a>
+                </div>
+
+
+
+            </div>
+
+            <div class="row  mx-5 gx-3">
+
+
+                <div class="col-md-6 mt-3 text-center">
+                    <a href="/incomeManager" class="menu-ic">
+                        <div class="menu-ic p-4 rounded">
+                            <i class="icon-plus"></i>
+                            <div> Dodaj przychód</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-6 mt-3 text-center">
+
+                    <a href=/profile/show class="menu-ic">
+                        <div class="menu-ic p-4 rounded">
+                            <i class="icon-cog"></i>
+                            <div>Ustawienia</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row pb-5 mx-5 mt-3 gx-3">
+                <a href="/logout" class="log-out">
+                    <div class=" col-md text-center">
+                        <div class="log-out-btn  border p-2 rounded">Wyloguj</div>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+    {% endblock %}

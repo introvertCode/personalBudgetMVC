@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block footer %}
+<script src="/js/EditAndDeleteIncomeExpense.js"></script>
+<script src="/js/app.js"></script>
+
+    <script>
+        
+          
+        $(document).ready(function(){
+            
+            $('#addIncomeCategory').validate({
+                rules: {
+                    newCategory: {
+                        required: true,
+                        validLength: true
+                    },
+                },
+            });
+
+            $('#addExpenseCategory').validate({
+                rules: {
+                    newCategory: {
+                        required: true,
+                        validLength: true
+                    },
+                },
+            });addPaymentMethod
+
+            $('#addPaymentMethod').validate({
+                rules: {
+                    newMethod: {
+                        required: true,
+                        validLength: true
+                    },
+                },
+            });
+
+            
+
+        });
+
+    </script>
+
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="container mt-3 p-3" id="menu-left">
+        <h1>Profil</h1>
+
+        <dl class="dl-horizontal">
+            <dt>Imię</dt>
+            <dd>{{ user.name }}</dd>
+            <dt>email</dt>
+            <dd>{{ user.email }}</dd>
+        </dl>
+
+        <a href="/profile/edit">Edit</a>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="container mt-3 p-3" id="menu-left">
+        
+        <h3>Kategorie przychodów</h3>
+        <div class="d-flex align-content-start flex-wrap">
+        {% for incomeCategory in incomeCategories %}
+                <div class="justify-content-center">
+                <div id="{{ incomeCategory.id }}" class="button-57 mx-1" value="Edit"onClick=" deleteIncomeCategory(this.id)"><span class=" text-nowrap text text-center">{{ incomeCategory.name }}</span><span>Usuń</span></div>
+            </div>
+                <!-- <div class="btn mx-3 removeCategory" id="{{ incomeCategory.id }}" name="edit" value="Edit" onClick="deleteIncomeCategory(this.id)">Usuń</div></div> -->
+        {% endfor %}
+    </div>
+        <!-- dodać walidację- czy już istnieje taka kategoria -->
+        <form  method = "POST" id="addIncomeCategory" action="/Profile/addIncomeCategory">
+            <div class="form-group mt-5">
+                <label for="inputEmail"><b>Dodaj nową kategorię przychodu </b></label>
+                <input id="inputCategory" name="newCategory" placeholder=" kategoria przychodu" value="" required type="text" class="editMenuInput" maxlength="50"/>
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- szare tło -->
+<div id="outer"></div>
+
+<div class="d-flex justify-content-center">
+    <div id="deleteIncomeCategory">
+        <div class="container">
+            <form method="post" id="addIncomeForm" class="mt-3" action="/Profile/deleteIncomeCategory">
+                <div class="row justify-content-center"><div class = "h5 text-center">Czy usunąć pozycję?</div></div>
+                
+                <div class="row justify-content-center">
+                    <input name="id" id="del-category-income-id"/>
+                    <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
+                    <div class="mt-3 col d-flex justify-content-center" id="cancel">
+                        <div class="btn btn-danger" id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="container mt-3 p-3" id="menu-left">
+        <h3>Kategorie wydatków</h3>
+        <div class="d-flex align-content-start flex-wrap">
+            {% for expenseCategory in expenseCategories %}
+                <div class="justify-content-center">
+                    <div id="{{ expenseCategory.id }}" class="button-57 mx-1" value="Edit" onClick="deleteExpenseCategory(this.id)"><span class=" text-nowrap text text-center">{{ expenseCategory.name }}</span><span>Usuń</span></div>
+                    <!-- <div class="btn mx-3 removeCategory" id="{{ expenseCategory.id }}" name="edit" value="Edit" onClick="deleteExpenseCategory(this.id)">Usuń</div> -->
+                </div>
+            {% endfor %}
+        </div>
+        <!-- dodać walidację- czy już istnieje taka kategoria -->
+        <form  method = "POST" id="addExpenseCategory" action="/Profile/addExpenseCategory">
+            <div class="form-group mt-5">
+                <label for="inputEmail"><b>Dodaj nową kategorię wydatku </b></label>
+                <input id="inputCategory" name="newCategory" placeholder=" kategoria wydatku" value="" required type="text" class="editMenuInput" maxlength="50"/>
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div id="deleteExpenseCategory">
+        <div class="container">
+            <form method="post" id="addIncomeForm" class="mt-3" action="/Profile/deleteExpenseCategory">
+                <div class="row justify-content-center"><div class = "h5 text-center">Czy usunąć pozycję?</div></div>
+                
+                <div class="row justify-content-center">
+                    <input name="id" id="del-category-expense-id"/>
+                    <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
+                    <div class="mt-3 col d-flex justify-content-center" id="cancel">
+                        <div class="btn btn-danger" id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="container mt-3 p-3 mb-3" id="menu-left">
+        <h3>Metody płatności</h3>
+        <div class="d-flex align-content-start flex-wrap">
+            {% for paymentMethod in paymentMethods %}
+                <div class="justify-content-center">
+                    <div id="{{ paymentMethod.id }}" class="button-57 mx-1" value="Edit" onClick="deletePaymentMethod(this.id)"><span class=" text-nowrap text text-center">{{ paymentMethod.name }}</span><span>Usuń</span></div>
+                <!-- <div class="btn mx-3 removeCategory" id="{{ paymentMethod.id }}" name="edit" value="Edit" onClick="deletePaymentMethod(this.id)">Usuń</div> -->
+            </div>
+            {% endfor %}
+        </div>
+        <!-- dodać walidację- czy już istnieje taka kategoria -->
+        <form  method = "POST" id="addPaymentMethod" action="/Profile/addPaymentMethod">
+            <div class="form-group mt-5">
+                <label for="inputMethod"><b>Dodaj nową metodę płatności</b></label>
+                <input id="inputMethod" name="newMethod" placeholder=" nowa metoda" value="" required type="text" class="editMenuInput" maxlength="50"/>
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div id="deletePaymentMethod">
+        <div class="container">
+            <form method="post" id="delete-Payment-Method" class="mt-3" action="/Profile/deletePaymentMethod">
+                <div class="row justify-content-center"><div class = "h5 text-center">Czy usunąć metodę?</div></div>
+                
+                <div class="row justify-content-center">
+                    <input name="id" id="del-payment-method-id"/>
+                    <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
+                    <div class="mt-3 col d-flex justify-content-center" id="cancel">
+                        <div class="btn btn-danger" id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
