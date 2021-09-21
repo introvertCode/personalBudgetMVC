@@ -445,7 +445,7 @@ class User extends \Core\Model
     }
 
      /**
-     * Add default income categories to user
+     * Add default expense categories to user
      * @return void
      */
     public function addDefaultExpenseCategories(){
@@ -472,4 +472,31 @@ class User extends \Core\Model
         }
     }
 
+     /**
+     * Add default payment methods to user
+     * @return void
+     */
+    public function addDefaultPaymentMethods(){
+        
+        $idQuery = "SELECT id FROM users WHERE email = :email";
+        $db = static::getDB();
+        $stmt = $db->prepare($idQuery);
+        $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+        $stmt->execute();
+        $registeredUserId = $stmt->fetchColumn();
+        
+        $paymentMethodsQuery = "SELECT name FROM payment_methods_default";
+        $db = static::getDB();
+        $stmt1 = $db->prepare($paymentMethodsQuery);
+        $stmt1->execute();
+        $paymentMethods = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+       
+        
+        for ($i = 0; $i < count($paymentMethods); $i++) {
+            $method = $paymentMethods[$i]['name'];
+            $insertPaymentMethodsQuery = "INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES (?,?)";
+            $stmt2 = $db->prepare($insertPaymentMethodsQuery);
+            $stmt2->execute(array($registeredUserId, $method));
+        }
+    }
 }

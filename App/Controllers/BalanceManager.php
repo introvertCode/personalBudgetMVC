@@ -76,7 +76,7 @@ class BalanceManager extends Authenticated
     }
 
     public function updateExpenseAction(){
-        $expenseManager = new expenseManager();
+        $expenseManager = new ExpenseManager();
         $expenseManager->updateAction($_POST);
     }
 
@@ -86,7 +86,7 @@ class BalanceManager extends Authenticated
     }
 
     public function deleteExpenseAction(){
-        $expenseManager = new expenseManager();
+        $expenseManager = new ExpenseManager();
         $expenseManager->deleteAction($_POST);
     }
 }

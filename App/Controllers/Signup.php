@@ -36,6 +36,7 @@ class Signup extends \Core\Controller
             $user->sendActivationEmail();
             $user->addDefaultIncomeCategories();
             $user->addDefaultExpenseCategories();
+            $user->addDefaultPaymentMethods();
             //przekierowuje do adresu /signup/success, co wpisuje się w schemat model: signup, action: success i uruchamia metodę successAction, która przekierowuje na stronę success.html
             $this->redirect('/signup/success');
 
