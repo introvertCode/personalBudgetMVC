@@ -44,17 +44,26 @@ class BalanceManager extends Authenticated
         $expenseCategories = ExpenseManager::getExpenseCategoriesOfUser();
         $paymentMethods = ExpenseManager::getPaymentMethodsOfUser();
 
-        View::renderTemplate('BalanceManager/show.html',['expenses'=>$balance->expenses, 
+        View::renderTemplate('BalanceManager/show.html',[
+        'expenses'=>$balance->expenses, 
         'incomes'=>$balance->incomes, 
         'startDate'=>$balance->startDate, 
         'endDate'=>$balance->endDate, 
         'incomeRecords'=>$balance->incomeRecords, 
         'expenseRecords'=>$balance->expenseRecords,
         'incomeCategoryRecords'=>$balance->incomeCategoryRecords, 
-        'balance'=>$balance->balance, 
+        'balance'=>$balance->balance,
+        'incomesAmountArray'=>$balance->incomesAmountArray,
+        'incomesCategoryArray'=>$balance->incomesCategoryArray, 
+        'sumOfIncomes'=>$balance->sumOfIncomes,
+        'expensesAmountArray'=>$balance->expensesAmountArray,
+        'expensesCategoryArray'=>$balance->expensesCategoryArray,
+        'sumOfExpenses'=>$balance->sumOfExpenses,
+        'expenseCategoryRecords'=>$balance->expenseCategoryRecords,
         'incomeCategories'=>$incomesCategories, 
         'expenseCategories'=>$expenseCategories,
         'paymentMethods' => $paymentMethods
+
     ]);
         
 

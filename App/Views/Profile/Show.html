@@ -115,7 +115,7 @@
         <div class="d-flex align-content-start flex-wrap">
             {% for expenseCategory in expenseCategories %}
                 <div class="justify-content-center">
-                    <div id="{{ expenseCategory.id }}" class="button-57 mx-1" value="Edit" onClick="deleteExpenseCategory(this.id)"><span class=" text-nowrap text text-center">{{ expenseCategory.name }}</span><span>Usuń</span></div>
+                    <div id="{{ expenseCategory.id }}" class="button-57 mx-1" value="Edit" onClick="deleteExpenseCategory(this.id)"><span class=" text-nowrap text text-center">{{ expenseCategory.name }}</span><span>Edytuj</span></div>
                     <!-- <div class="btn mx-3 removeCategory" id="{{ expenseCategory.id }}" name="edit" value="Edit" onClick="deleteExpenseCategory(this.id)">Usuń</div> -->
                 </div>
             {% endfor %}
@@ -139,6 +139,10 @@
                 
                 <div class="row justify-content-center">
                     <input name="id" id="del-category-expense-id"/>
+                    <input type="text" class="form-control" placeholder="Nazwa" aria-label="Username" aria-describedby="basic-addon1">
+                    <label></label>
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">Ustawić limit dla kategorii?
+                    <input type="text" class="form-control" placeholder="Limit" aria-label="Username" aria-describedby="basic-addon1">
                     <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
                     <div class="mt-3 col d-flex justify-content-center" id="cancel">
                         <div class="btn btn-danger" id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div>

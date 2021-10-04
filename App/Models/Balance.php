@@ -132,7 +132,9 @@ class Balance extends \Core\Model
             }
         }
         //  echo $this->sumOfIncomes;
-
+        // $incomesAmountArray[]= null;
+        $this->incomesAmountArray = 0;
+        $this->incomesCategoryArray = 0;
          for ($i = 0; $i < $incomeCategoryRecords; $i++) {
             
             $incomeCategoryName = $this->incomesCategory[$i]->name;
@@ -147,17 +149,18 @@ class Balance extends \Core\Model
             $this->incomesAmountArray = $incomesAmountArray;
             $this->incomesCategoryArray = $incomesCategoryArray;
 
-            setcookie("incomesAmountArray", json_encode($incomesAmountArray));
-            setcookie("incomesCategoryArray", json_encode($incomesCategoryArray));
+            // setcookie("incomesAmountArray", json_encode($incomesAmountArray));
+            // setcookie("incomesCategoryArray", json_encode($incomesCategoryArray));
 
         }
+        // $this->incomesAmountArray = $incomesAmountArray;
         // print("<pre>".print_r($incomesAmountArray,true)."</pre>");
         // print("<pre>".print_r($incomesCategoryArray,true)."</pre>");
         
-        setcookie("sumOfIncomes", json_encode($this->sumOfIncomes));  
+        // setcookie("sumOfIncomes", json_encode($this->sumOfIncomes));  
              
        
-        setcookie("incomeCategoryRecords", json_encode($incomeCategoryRecords));
+        // setcookie("incomeCategoryRecords", json_encode($incomeCategoryRecords));
 
         
         
@@ -229,7 +232,8 @@ class Balance extends \Core\Model
             }
         }
          // echo $this->sumOfIncomes;
-
+         $this->expensesAmountArray = 0;
+         $this->expensesCategoryArray = 0;
          for ($i = 0; $i < $expenseCategoryRecords; $i++) {
             
             $expenseCategoryName = $this->expensesCategory[$i]->name;
@@ -243,16 +247,16 @@ class Balance extends \Core\Model
             
             $this->expensesAmountArray = $expensesAmountArray;
             $this->expensesCategoryArray = $expensesCategoryArray;
-            setcookie("expensesAmountArray", json_encode($expensesAmountArray));     
-            setcookie("expensesCategoryArray", json_encode($expensesCategoryArray));
+            // setcookie("expensesAmountArray", json_encode($expensesAmountArray));     
+            // setcookie("expensesCategoryArray", json_encode($expensesCategoryArray));
 
         }
         // print("<pre>".print_r($incomesAmountArray,true)."</pre>");
         // print("<pre>".print_r($incomesCategoryArray,true)."</pre>");
         
-        setcookie("sumOfExpenses", json_encode($this->sumOfExpenses));
+        // setcookie("sumOfExpenses", json_encode($this->sumOfExpenses));
         
-        setcookie("expenseCategoryRecords", json_encode($expenseCategoryRecords));
+        // setcookie("expenseCategoryRecords", json_encode($expenseCategoryRecords));
 
     }
 

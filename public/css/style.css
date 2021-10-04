@@ -688,6 +688,19 @@ input[id*= "expense-id"]{
 	color: white;
 }
 
+#deleteExpenseCategory{
+	display: none;
+	background: rgba(42, 212, 224, 0.61);
+	padding: 2rem;
+	height: 50%;
+	width: 50%;
+	position: fixed;
+	top: 50%;
+	border-radius:10px;
+	z-index: 6;
+	color: white;
+}
+
 
 [id*= "deletePayment"]{
 	display: none;

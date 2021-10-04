@@ -15,15 +15,15 @@ document.addEventListener('DOMContentLoaded', function() {
         google.charts.setOnLoadCallback(drawChart2);
         });
       
-      var sumOfIncomes = JSON.parse($.cookie("sumOfIncomes"));  
-      var incomeCategoryRecords = JSON.parse($.cookie("incomeCategoryRecords"));  
-      var incomesCategoryArray = JSON.parse($.cookie("incomesCategoryArray"));
-      var incomesAmountArray = JSON.parse($.cookie("incomesAmountArray"));
+      // var sumOfIncomes = JSON.parse($.cookie("sumOfIncomes"));  
+      // var incomeCategoryRecords = JSON.parse($.cookie("incomeCategoryRecords"));  
+      // var incomesCategoryArray = JSON.parse($.cookie("incomesCategoryArray"));
+      // var incomesAmountArray = JSON.parse($.cookie("incomesAmountArray"));
 
-      var sumOfExpenses = JSON.parse($.cookie("sumOfExpenses"));
-      var expenseCategoryRecords = JSON.parse($.cookie("expenseCategoryRecords"));  
-      var expensesCategoryArray = JSON.parse($.cookie("expensesCategoryArray"));
-      var expensesAmountArray = JSON.parse($.cookie("expensesAmountArray"));
+      // var sumOfExpenses = JSON.parse($.cookie("sumOfExpenses"));
+      // var expenseCategoryRecords = JSON.parse($.cookie("expenseCategoryRecords"));  
+      // var expensesCategoryArray = JSON.parse($.cookie("expensesCategoryArray"));
+      // var expensesAmountArray = JSON.parse($.cookie("expensesAmountArray"));
 
       function drawChart() {
         

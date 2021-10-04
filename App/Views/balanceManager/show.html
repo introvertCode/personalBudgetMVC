@@ -16,12 +16,27 @@
 <script type="text/javascript"></script>
 <script>
     // var incomesAmountArray = '{{   entry.title|e('js') }}';   
-    var entryTitle = "{{ entry.title|e('js') }}"
+    // var entryTitle = "{{ entry.title|e('js') }}";
+    // console.log(entryTitle);
 </script>
 
 <script>
+   //przekazanie z twiga do JS
     var incomes = JSON.parse('{{ incomes | json_encode | raw }}');
     var expenses = JSON.parse('{{ expenses | json_encode | raw }}');
+    var incomesAmountArray = JSON.parse('{{ incomesAmountArray | json_encode | raw }}');
+    var incomesCategoryArray = JSON.parse('{{ incomesCategoryArray | json_encode | raw }}');
+    var sumOfIncomes = JSON.parse('{{ sumOfIncomes | json_encode | raw }}');
+    var incomeCategoryRecords = JSON.parse('{{ incomeCategoryRecords | json_encode | raw }}');
+    var expensesAmountArray = JSON.parse('{{ expensesAmountArray | json_encode | raw }}');
+    var expensesCategoryArray = JSON.parse('{{ expensesCategoryArray | json_encode | raw }}');
+    var sumOfExpenses = JSON.parse('{{ sumOfExpenses | json_encode | raw }}');
+    var expenseCategoryRecords = JSON.parse('{{ expenseCategoryRecords | json_encode | raw }}');
+
+
+
+    console.log(incomesCategoryArray);
+
 </script> 
 
 <script src="/js/EditAndDeleteIncomeExpense.js"></script>
