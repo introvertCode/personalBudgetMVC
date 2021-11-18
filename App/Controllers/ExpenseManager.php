@@ -31,6 +31,8 @@ class ExpenseManager extends Authenticated
      * @return void
      */
     public function showAction(){
+        Expense::getPaymentMethodsOfUser();
+        
         $categories = ExpenseManager::getExpenseCategoriesOfUser();
         $paymentMethods = Expense::getPaymentMethodsOfUser();
         View::renderTemplate('ExpenseManager/show.html',['expenseCategories'=>$categories, 'paymentMethods'=>$paymentMethods]);
@@ -64,7 +66,7 @@ class ExpenseManager extends Authenticated
      * @return void
      */
     public function showSuccessMessageAction(){
-        Flash::addMessage('Adding successful');
+        Flash::addMessage('Dodano pomyślnie');
         $this->redirect('/ExpenseManager/show');
     }
 
@@ -75,7 +77,7 @@ class ExpenseManager extends Authenticated
         $expense = new Expense ();
        
         if($expense->updateExpense($data)) {
-            Flash::addMessage('Changes saved');
+            Flash::addMessage('Zapisano zmiany');
             $this->redirect('/BalanceManager/add');
         } else {
             Flash::addMessage('Nie udało się dodać przychodu', Flash::WARNING);
@@ -88,7 +90,7 @@ class ExpenseManager extends Authenticated
         $expense = new Expense ();
 
         if($expense->deleteExpense($id)) {
-            Flash::addMessage('Changes saved');
+            Flash::addMessage('Usunięto pomyślnie');
             $this->redirect('/BalanceManager/add');
         }
 
@@ -121,5 +123,25 @@ class ExpenseManager extends Authenticated
         
         return Expense::deletePaymentMethod($data);
         
+    }
+
+    static public function setLimit($data){
+        
+        return Expense::setLimit($data);
+        
+    }
+
+    static public function showLimitAction(){
+        $limit = Expense::getLimit($_POST);
+        echo  json_encode($limit);
+        
+        // return Expense::getLimit($_POST);
+        
+    }
+
+    static public function changePaymentMethodName($data){
+        $expense = new Expense();
+        return $expense->changePaymentMethodName($data);
+
     }
 }

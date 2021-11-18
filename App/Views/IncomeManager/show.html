@@ -56,33 +56,34 @@
                         document.getElementById('datePicker').valueAsDate = new Date();
                     </script>
 
-                    <div class="container d-flex justify-content-center text-start" id="fieldset">
+                    <div class="container text-start" id="fieldset">
                         <fieldset class="mt-4" id="frame">
-                            <div class="row d-flex justify-content-center">
-                            <!-- <legend> Rodzaj przychodu:</legend> -->
-                            
-                            {% for incomeCategory in incomeCategories %}
-                                <!-- <div><label><input class="radio-input" type="radio" value="Wynagrodzenie" name="category"
-                                            checked="checked"><span class="radio-span">Wynagrodzenie</span></label>
-                                </div>
-                                <div><label><input class="radio-input" type="radio" value="Odsetki Bankowe" name="category"><span
-                                            class="radio-span">Odsetki bankowe</span></label></div>
-                                <div><label><input class="radio-input" type="radio" value="Sprzedaż Allegro" name="category"><span
-                                            class="radio-span">Sprzedaż na allegro</span></label></div>
-                                <div><label><input class="radio-input" type="radio" value="Inne" name="category"><span
-                                            class="radio-span">Inne</span></label></div> -->
+                            <div class="row d-flex justify-content-center">                           
+                            {% for incomeCategory in incomeCategories %}                             
                                 {% if loop.first %}    
-                                    <!-- <div><label><input class="radio-input" type="radio" value="{{incomeCategory.name}}" name="category"
-                                                checked="checked"><span class="radio-span">{{incomeCategory.name}}</span></label>
-                                    </div> -->
-                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-6 text-nowrap"><label><input class="radio-input"
-                                        type="radio" value="{{incomeCategory.name}}" name="category" checked="checked"><span
-                                        class="radio-span">{{incomeCategory.name}}</span></label>
+                                   
+                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-12">
+                                        <label>
+                                            <div class="d-flex">
+                                                <div class="align-self-center d-flex">
+                                                    <input class="radio-input" type="radio" value="{{incomeCategory.name}}" name="category" checked="checked">
+                                                </div>
+                                                <div class="radio-span">{{incomeCategory.name}}</div>
+                                        </div>
+                                        </label>
                                     </div>
                                 {% else %}
-                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-6 text-nowrap"><label><input class="radio-input"
-                                        type="radio" value="{{incomeCategory.name}}" name="category"><span
-                                        class="radio-span">{{incomeCategory.name}}</span></label>
+                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-12">
+                                        <label>
+                                            <div class="d-flex">
+                                                <div class="align-self-center d-flex">
+                                                    <input class="radio-input" type="radio" value="{{incomeCategory.name}}" name="category">
+                                                </div>
+
+                                                <div class="radio-span">{{incomeCategory.name}}</div>
+
+                                            </div>
+                                        </label>
                                     </div>
                                 {% endif %}
                             {% endfor %}

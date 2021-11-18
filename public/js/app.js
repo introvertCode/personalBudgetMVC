@@ -48,7 +48,7 @@ function(value, element, param){
 $.validator.addMethod('validLength', 
 function(value, element, param){
     
-        if(value.length > 50 ){
+        if(value.length > 50 || value.length < 1){
             return false;
         }
     
@@ -56,4 +56,17 @@ function(value, element, param){
     return true;
 },
     'Nazwa może mieć maksymalnie 50 znaków'
+);
+
+$.validator.addMethod('validAmount', 
+function(value, element, param){
+    
+        if(value < 0 || value > 99999999999){
+            return false;
+        }
+    
+
+    return true;
+},
+    'Limit nie może być mniejszy od 0'
 );

@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // document.getElementById("start").innerHTML = startDate;
 
 // document.getElementById("end").innerHTML = endDate;
+balance = parseFloat(balance).toFixed(2);
 
 document.getElementById("balance").innerHTML = balance;
 

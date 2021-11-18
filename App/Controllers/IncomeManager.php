@@ -72,7 +72,7 @@ class IncomeManager extends Authenticated
      * @return void
      */
     public function showSuccessMessageAction(){
-        Flash::addMessage('Adding successful');
+        Flash::addMessage('Dodano pomyślnie');
         $this->redirect('/IncomeManager/show');
     }
 
@@ -83,7 +83,7 @@ class IncomeManager extends Authenticated
         $income = new Income ();
        
         if($income->updateIncome($data)) {
-            Flash::addMessage('Changes saved');
+            Flash::addMessage('Zapisano zmiany');
             $this->redirect('/BalanceManager/add');
         } else {
 
@@ -95,21 +95,25 @@ class IncomeManager extends Authenticated
         $income = new Income ();
 
         if($income->deleteIncome($id)) {
-            Flash::addMessage('Changes saved');
+            Flash::addMessage('Usunięto pomyślnie');
             $this->redirect('/BalanceManager/add');
         }
 
     }
 
-    static public function addIncomeCategory($data){
+    static public function addIncomeCategoryAction($data){
         $income = new Income();
         return $income->addIncomeCategory($data);
         
     }
 
-    static public function deleteIncomeCategory($data){
+    static public function deleteIncomeCategoryAction($data){
         
         return Income::deleteIncomeCategory($data);
         
+    }
+
+    static public function changeIncomeCategoryNameAction($data){
+       return  Income::changeIncomeCategoryName($data);
     }
 }

@@ -42,10 +42,12 @@ class Expense extends \Core\Model
         if (empty($this->errors)) {
             
             //prepared statements - placeholdery :name, :email itd.
-            
 
             $this->user = Auth::getUser();
             $loggedUserId = $this->user->id;
+
+            
+
             $expense_category_assigned_to_user_id = Expense::getCategoryId($loggedUserId, $this->category);
             $payment_method_assigned_to_user_id = Expense::getPaymentMethodId($loggedUserId, $this->paymentMethod);
 
@@ -68,6 +70,7 @@ class Expense extends \Core\Model
         return false;
     }
 
+  
     /**
      * Validate current property values, adding valiation error mesages to the errors array property
      * 
@@ -146,7 +149,10 @@ class Expense extends \Core\Model
 
         $this->user = Auth::getUser();
         $loggedUserId = $this->user->id;
+
         $expense_category_assigned_to_user_id = Expense::getCategoryId($loggedUserId, $this->category);
+
+
         $payment_method_assigned_to_user_id = Expense::getPaymentMethodId($loggedUserId, $this->paymentMethod);
 
         $this->validate();
@@ -159,7 +165,7 @@ class Expense extends \Core\Model
                         payment_method_assigned_to_user_id = :payment_method_assigned_to_user_id,
                         date_of_expense = :date_of_expense,
                         expense_comment = :expense_comment
-                        WHERE id = :id';
+                    WHERE id = :id';
 
 
             $db = static::getDB();
@@ -176,6 +182,38 @@ class Expense extends \Core\Model
             return $stmt->execute();
         }
         return false;
+    }
+
+
+
+    static public function getCategoryIdByExpenseId($expenseId){
+
+        $sql = "SELECT expense_category_assigned_to_user_id FROM expenses WHERE id = :id";
+
+        $db = static::getDB();
+            
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $expenseId, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return  $stmt->fetchColumn();
+    }
+
+    static public function getAmountIdByExpenseId($expenseId){
+
+        $sql = "SELECT amount FROM expenses WHERE id = :id";
+
+        $db = static::getDB();
+            
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $expenseId, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return  $stmt->fetchColumn();
     }
 
     public function deleteExpense($data){
@@ -198,7 +236,7 @@ class Expense extends \Core\Model
         $user = Auth::getUser();
         $loggedUserId = $user->id;
         
-        $sql = 'SELECT id, name FROM expenses_category_assigned_to_users WHERE user_id = :loggedUserId';
+        $sql = 'SELECT id, name, limit_set FROM expenses_category_assigned_to_users WHERE user_id = :loggedUserId';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -397,6 +435,199 @@ class Expense extends \Core\Model
         
         return $stmt->execute();
     }
+
+    static public function findCategoryNameById($id){
+
+        $sql = 'SELECT name FROM expenses_category_assigned_to_users WHERE id = :id';
+
+        $db = static::getDB();
+            
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        
+        $stmt->execute();
+
+        $categoryName = $stmt->fetchColumn();
+        
+        return $categoryName;
+    }
+
+    static public function findCategoryLimitstById($id){
+
+        // $sql = 'SELECT limit_spent, limit_set, name FROM expenses_category_assigned_to_users WHERE id = :id';
+        date_default_timezone_set ( 'Europe/Warsaw');
+        $month = date("m");
+        $year = date("Y");
+        $day = date("d");
+        
+        $startDate = date_create();
+        $endDate = date_create();
+        $lastDay = $day;
+        $firstDay = 1;
+        $startMonth = $month;
+        // $endMonth = $startMonth;
+        
+        if($startMonth == 1||$startMonth == 3||$startMonth == 5||$startMonth == 7||$startMonth == 8||$startMonth == 10||$startMonth == 12){
+            $lastDay = 31;
+        }elseif($startMonth == 2){
+            $isLeap = date('L');
+            if($isLeap) $lastDay = 29;
+            else $lastDay = 28;
+        
+        }else{
+            $lastDay = 30;
+        }
+
+        date_date_set($startDate, $year, $startMonth, $firstDay);
+        date_date_set($endDate, $year, $startMonth, $lastDay);
+        $startDate = date_format($startDate,"Y-m-d");
+        $endDate = date_format($endDate,"Y-m-d");
+
+        
+        $expenseCategoryQuery = "SELECT sum(expenses.amount) As sum, expenses_category_assigned_to_users.limit_set, expenses_category_assigned_to_users.name 
+        FROM expenses
+        INNER JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id 
+        WHERE expenses.expense_category_assigned_to_user_id = '$id' AND expenses.date_of_expense >= '$startDate' AND expenses.date_of_expense <= '$endDate' 
+        GROUP BY expenses.expense_category_assigned_to_user_id;";
+
+        $db = static::getDB();
+            
+        $stmt = $db->prepare($expenseCategoryQuery);
+
+        // $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        
+        $stmt->execute();
+
+        $limit_spent = $stmt->fetchAll();
+
+        if(!$limit_spent){
+            $sql = 'SELECT limit_set, name FROM expenses_category_assigned_to_users WHERE id = :id';
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        
+            $stmt->execute();
+
+            $limit_spent = $stmt->fetchAll();
+
+            $limit_spent[0]["sum"] = 0.00;
+
+        }
+
+        // print_r($limit_spent);
+        
+        return $limit_spent;
+    }
+
+
+  
+    static public function setLimit($data){
+       
+        $id = $data['id'];
+        $limit_set = $data['limit'];
+        $name = $data['name'];
+        
+        $categoryName = Expense::findCategoryNameById($id);
+
+        if ($limit_set == -1){
+            $limit_set = NULL;
+        }
+        
+        $user = Auth::getUser();
+        $loggedUserId = $user->id;
+        
+        $db = static::getDB();
+        
+        if ($name == $categoryName){
+            
+            $sql = 'UPDATE expenses_category_assigned_to_users
+            SET limit_set = :limit_set   
+            WHERE id = :id';
+            $stmt = $db->prepare($sql);
+            
+        } else {
+            
+            if (!Expense::checkIfCategoryExists($name, $loggedUserId)){
+                $sql = 'UPDATE expenses_category_assigned_to_users
+                SET limit_set = :limit_set, name = :name
+                WHERE id = :id';
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+            
+            } else {
+
+                $sql = 'UPDATE expenses_category_assigned_to_users
+                SET limit_set = :limit_set
+                WHERE id = :id';
+
+                $stmt = $db->prepare($sql);
+            }
+            
+        }
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':limit_set', $limit_set, PDO::PARAM_STR);    
+    
+        $stmt->execute();
+        
+        return $limit_set;
+        
+        
+    }
+    
+    static public function getLimit($data){
+        $id = $data['categoryId'];
+        $limit_spent = Expense::findCategoryLimitstById($id);
+        
+        // echo $limit_left;
+        return  $limit_spent;
+    }
+
+    static public function resetLimitSpent(){
+        $expenseCategoriesOfUser =  Expense::getExpenseCategoriesOfUser();
+        $resetLimit = 0;
+        $db = static::getDB();
+        // print_r($expenseCategoriesOfUser);
+        for ($i = 0; $i < count($expenseCategoriesOfUser); $i++) {
+            $categoryId = $expenseCategoriesOfUser[$i]->id;
+            $insertIncomeCategoryQuery = "UPDATE expenses_category_assigned_to_users 
+                SET limit_spent = :resetLimit
+                WHERE id = :categoryId";
+            $stmt = $db->prepare($insertIncomeCategoryQuery);
+            $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+            $stmt->bindValue(':resetLimit', $resetLimit, PDO::PARAM_STR);
+            $stmt->execute();
+        }
+
+        return;
+
+    }
+
+    public function changePaymentMethodName($data){
+      $id = $data['id'];
+      $name = $data['name'];
+
+      $this->user = Auth::getUser();
+      
+      $loggedUserId = $this->user->id;
+      
+
+      if (!Expense::checkIfPaymentMethodExists($name, $loggedUserId)){
+          $sql = 'UPDATE payment_methods_assigned_to_users  SET name=:name WHERE id=:id';
+
+          $db = static::getDB();
+          $stmt = $db->prepare($sql);
+          
+          $stmt->bindValue('name', $name, PDO::PARAM_STR);
+          $stmt->bindValue('id', $id, PDO::PARAM_INT);
+          
+          return $stmt->execute();
+      }
+      return false;  
+
+    }
+
+
 
 
 }

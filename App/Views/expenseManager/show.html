@@ -25,6 +25,103 @@
 
         });
 
+        // $(".bet").unbind().click(function() {
+                
+        // });
+    
+        $(document).ready(function(){
+            let id = $('.firstCat').attr('id');
+            showLimitBox(id);
+        });
+
+
+        function showLimitBox(clicked){
+           
+           
+            
+           
+            var categoryId = clicked;
+            console.log(categoryId);
+            // limitSet = -1;
+            // $('#limit-span').html(expenseId);
+            $.ajax("/ExpenseManager/showLimit", {
+                type: 'POST',
+                data: {categoryId: categoryId},
+                dataType : "json",
+                success: function(data){
+                    console.table(data);
+                    $('#limit-set').html(data[0].limit_set);
+                    limitSet = parseFloat(data[0].limit_set);
+                    if(data[0].limit_set){
+                        $('#limit-spent').html(data[0].sum);
+                        limitSpent =  parseFloat(data[0].sum);
+                        balance = data[0].limit_set - data[0].sum
+                        $('#limit-balance').html(balance);
+                        let amount = +$("#amount").val();
+                        var expenseAndLimitSpent = limitSpent + amount;
+                        $('#spent-and-amount').html(expenseAndLimitSpent);
+                    }
+                    // console.log(limitSet);
+                    if (limitSet){
+                        // $(".limitBox").show(200);
+                        $(".limitBox").slideDown();
+                        // $(".limitBox").css("display", "block");
+                        // $("#limitInfo").css("display", "block");
+                        $("#limitInfo").slideDown();
+                        
+                        
+                    } else {
+                        // $(".limitBox").css("display", "none");
+                        $(".limitBox").slideUp(); 
+                        // $("#limitInfo").css("display", "none");
+                        $("#limitInfo").slideUp();
+                    }
+
+                    $("#amount").keyup(function(){
+           
+                        // console.log($( this ).val());
+                        let amount = +$( this ).val();
+                        var expenseAndLimitSpent = amount + limitSpent;
+
+                        $('#spent-and-amount').html(expenseAndLimitSpent);
+                        if (amount > balance || balance < 0) {
+                            $(".limitBox").css("background-color", "rgba(224, 9, 9, 0.692)");
+                        } else {
+                            $(".limitBox").css("background-color", "rgba(16, 224, 9, 0.692)");
+                        }
+                        
+                    });
+
+                    $('#spent-and-amount').html(expenseAndLimitSpent);
+                    
+                    if (amount > balance || balance < 0) {
+                        $(".limitBox").css("background-color", "rgba(224, 9, 9, 0.692)");
+                    } else {
+                        $(".limitBox").css("background-color", "rgba(16, 224, 9, 0.692)");
+                    }
+                    
+                    if(data[0].limit_set){
+                        possibleSpendings = limitSet - limitSpent;
+                        if (possibleSpendings > 0) {
+                            $('#limitInfo').html("Możesz jeszcz wydać <b>" + possibleSpendings + "</b> w kategorii <b>" + data[0].name + "</b>");
+                        } else {
+                            $('#limitInfo').html("Niestety, w tymi miesiącu limit wydatków w kategorii  <b>" + data[0].name + "</b> został osiągnięty");
+                        }
+                    }
+                   
+                   
+                }
+              
+
+                
+            });
+            
+            
+           
+
+           
+        }
+
     </script>
 
 {% endblock %}
@@ -44,12 +141,33 @@
 
     {% endif %}
                 <h1>Dodaj wydatek</h1>
-
+                <div id =limitInfo>Możesz wydać jeszcze </div>
+                <div class="container limitBox mt-3">
+                    <div class="row row-cols-4">
+                        <div class="limit-window col-xl-3 col-md-6 col-sm-6 mt-2 col-12">
+                            Limit: <p class="limitField" id="limit-set"></p>
+                        </div>
+                        <div class="limit-window col-xl-3 col-md-6 col-sm-6 mt-2 col-12">
+                            Dotychczas wydano: <p class="limitField" id="limit-spent"></p>
+                        </div>
+                        <div class="limit-window col-xl-3 col-md-6 col-sm-6 mt-2 col-12">
+                            Różnica: <p class="limitField" id="limit-balance"></p>
+                        </div>
+                        <div class="limit-window col-xl-3 col-md-6 col-sm-6 mt-2 col-12">
+                        Wydatki + wpisana kwota: <p class="limitField" id="spent-and-amount"></p>
+                        </div>
+                    </div>
+                </div>
+               
                 <form method="post" id="addExpenseForm" class="mt-3" action="/ExpenseManager/Add">
-                    <div><input class="add-Income-Form-Input" id="amount" name="amount" type="number" placeholder="kwota"
-                            step="0.01" required></div>
-                    <div><input class="add-Income-Form-Input" name="date" id="datePicker" type="date" /></div>
-
+                    <div>
+                        <input class="add-Income-Form-Input" id="amount" name="amount" type="number" placeholder="kwota"
+                            step="0.01" required>
+                    </div>
+                   
+                    <div>
+                        <input class="add-Income-Form-Input" name="date" id="datePicker" type="date" />
+                    </div>
                     <script>
                         document.getElementById('datePicker').valueAsDate = new Date();
                     </script>
@@ -60,14 +178,52 @@
                             <div class="row d-flex justify-content-center">
                             {% for expenseCategory in expenseCategories %}
                                 {% if loop.first %}    
-                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-6 "><label><input class="radio-input"
-                                                type="radio" value="{{ expenseCategory.name }}" name="category" checked="checked"><span
-                                                class="radio-span">{{ expenseCategory.name }}</span></label>
+                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-12 d-flex">
+                                        <label class="align-self-center"  >
+                                            <div class="d-flex">
+                                                <div class="align-self-center d-flex">
+                                                    <input class="radio-input align-self-center expCat firstCat" id="{{ expenseCategory.id}}" onclick="showLimitBox(this.id)" type="radio" value="{{ expenseCategory.name }}" name="category" checked="checked">
+                                                </div>
+                                                
+                                                <div>
+                                                    <div class="radio-span">{{ expenseCategory.name }}</div>
+                                                   
+                                                        {% if expenseCategory.limit_set %}
+                                                        <p class="limit-add-expense">Limit:  
+                                                            {{expenseCategory.limit_set }}
+                                                        </p>
+                                                       
+                                                        {% endif %}                                                    
+                                                </div>
+                                            </div>
+                                        </label>
                                     </div>
                                 {% else %}
-                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-6 "> <label><input
-                                                class="radio-input" type="radio" value="{{ expenseCategory.name }}" name="category"><span
-                                                class="radio-span">{{ expenseCategory.name }}</span></label>
+                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-12 d-flex"> 
+                                        
+                                        <label class="align-self-center"> 
+                                            <div class="d-flex">
+                                                
+                                                <div class="align-self-center d-flex">
+                                                    <input class="radio-input align-self-center" type="radio" value="{{ expenseCategory.name }}" name="category" id="{{ expenseCategory.id}}" onclick="showLimitBox(this.id)">
+                                                </div>
+                                                
+                                                <div class="align-self-center">
+                                                    <div class="radio-span">{{ expenseCategory.name }}</div>                                              
+                                                    
+                                                        {% if expenseCategory.limit_set %}
+                                                        <p class="limit-add-expense">
+                                                         Limit: 
+                                                            {{expenseCategory.limit_set }}
+                                                        </p>
+                                                    
+                                                        {% endif %} 
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                        
+                                        </label>
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -81,12 +237,12 @@
                             <div class="row d-flex justify-content-center">
                             {% for method in paymentMethods %}
                                 {% if loop.first %}    
-                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-6"><label><input class="radio-input-payment"
+                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-12"><label><input class="radio-input-payment"
                                                 type="radio" value="{{ method.name }}" name="paymentMethod" checked="checked"><span
                                                 class="radio-span">{{ method.name }}</span></label>
                                     </div>
                                 {% else %}
-                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-6"> <label><input
+                                    <div class="col-xl-3 col-md-4 col-sm-6 mt-2 col-12"> <label><input
                                                 class="radio-input-payment" type="radio" value="{{ method.name }}" name="paymentMethod"><span
                                                 class="radio-span">{{ method.name }}</span></label>
                                     </div>

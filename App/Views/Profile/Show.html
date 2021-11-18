@@ -5,10 +5,14 @@
 {% block footer %}
 <script src="/js/EditAndDeleteIncomeExpense.js"></script>
 <script src="/js/app.js"></script>
+<script src="/js/ajax.js"></script>
 
     <script>
         
-          
+        var expenseCategories = JSON.parse('{{ expenseCategories | json_encode | raw }}');
+        var incomeCategories = JSON.parse('{{ incomeCategories | json_encode | raw }}');
+        var paymentMethods = JSON.parse('{{ paymentMethods | json_encode | raw }}');
+
         $(document).ready(function(){
             
             $('#addIncomeCategory').validate({
@@ -38,9 +42,48 @@
                 },
             });
 
-            
+            $('#changePaymentName').validate({
+                rules: {
+                    name: {
+                        required: true,
+                        validLength: true
+                    },
+                },
+            });
+
+            $('#changeIncomeName').validate({
+                rules: {
+                    name: {
+                        required: true,
+                        validLength: true
+                    },
+                },
+            });
+
+            $('#changeIncomeName').validate({
+                rules: {
+                    name: {
+                        required: true,
+                        validLength: true
+                    },
+                },
+            });
+
+            $('#editExpenseForm').validate({
+                rules: {
+                    name: {
+                        required: true,
+                        validLength: true
+                    },
+                    
+                    limit :{
+                        validAmount: true
+                    },
+                },
+            });
 
         });
+
 
     </script>
 
@@ -71,7 +114,10 @@
         <div class="d-flex align-content-start flex-wrap">
         {% for incomeCategory in incomeCategories %}
                 <div class="justify-content-center">
-                <div id="{{ incomeCategory.id }}" class="button-57 mx-1" value="Edit"onClick=" deleteIncomeCategory(this.id)"><span class=" text-nowrap text text-center">{{ incomeCategory.name }}</span><span>Usuń</span></div>
+                <div id="{{ incomeCategory.id }}" class="button-57 mx-1" value="Edit"onClick=" deleteIncomeCategory(this.id)">
+                    <span class=" text-nowrap text text-center">{{ incomeCategory.name }}</span>
+                    <span>Edytuj</span
+                ></div>
             </div>
                 <!-- <div class="btn mx-3 removeCategory" id="{{ incomeCategory.id }}" name="edit" value="Edit" onClick="deleteIncomeCategory(this.id)">Usuń</div></div> -->
         {% endfor %}
@@ -90,7 +136,7 @@
 <!-- szare tło -->
 <div id="outer"></div>
 
-<div class="d-flex justify-content-center">
+<!-- <div class="d-flex justify-content-center">
     <div id="deleteIncomeCategory">
         <div class="container">
             <form method="post" id="addIncomeForm" class="mt-3" action="/Profile/deleteIncomeCategory">
@@ -107,15 +153,71 @@
             </form>
         </div>
     </div>
+</div> -->
+
+<div class="d-flex justify-content-center">
+    <!-- <div id="deleteExpenseCategory"> -->
+    <div id="editIncomeCategoryDiv">
+        <div class="container">
+            <!-- action="/Profile/setExpenseLimit" -->
+            <form method="post" id="changeIncomeName" class="mt-3" action="/Profile/changeIncomeCategoryName" >
+                
+                <div class="justify-content-center">
+                    <div id="" class = "h5 text-center">Zmień nazwę</div>
+                </div>
+                
+                <div class="justify-content-center">
+                    <input name="id" id="edit-category-income-id"/>
+                    <input name = "name" id = "income-category-name" type="text" class="form-control" placeholder="Nazwa">
+                    
+                    <div class="mt-3 mb-3 d-flex justify-content-center">
+                        <button class="btn btn-primary" type="submit" id="saveNameChange" value="" onClick="">Zapisz zmiany</button>
+                    </div>
+                    
+                </div>
+                
+            </form>
+            <hr id ="line">
+            <form method="post" id="delete-Income-Category" class="mt-3" action="/Profile/deleteIncomeCategory">
+                
+                <div class="justify-content-center">
+                    <div id="removeIncomeCategoryName" class = "h5 text-center">Czy usunąć kategorię?</div>
+                </div>
+                <div class="justify-content-center">
+                    <div id="sub-txt" class = "text-center">Usuwając kategorię usuniesz wszystkie operacje z nią zwiazane</div>
+                </div>
+                
+                <div class="justify-content-center">
+                    <input name="id" id="del-category-income-id"/>
+                    <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
+                </div>
+                
+            </form>
+            <div class="mt-2 d-flex justify-content-center"><div class="btn btn-danger px-5 " id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div></div>
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid">
     <div class="container mt-3 p-3" id="menu-left">
         <h3>Kategorie wydatków</h3>
+        <p id="ErrorMSG"></p>
         <div class="d-flex align-content-start flex-wrap">
             {% for expenseCategory in expenseCategories %}
                 <div class="justify-content-center">
-                    <div id="{{ expenseCategory.id }}" class="button-57 mx-1" value="Edit" onClick="deleteExpenseCategory(this.id)"><span class=" text-nowrap text text-center">{{ expenseCategory.name }}</span><span>Edytuj</span></div>
+                    <div id="{{ expenseCategory.id }}" class="button-57 mx-1" value="Edit" onClick="addLimitDiv(this.id)">
+                        <span id="exp-cat-{{ expenseCategory.id }}" class=" text-nowrap text text-center">{{ expenseCategory.name }}</span><br>
+                        <p class="mt-3 limit"  id="exp{{ expenseCategory.id }}">Limit: 
+                            
+                            {% if expenseCategory.limit_set %}
+                                {{expenseCategory.limit_set }}
+                            {% else %}
+                                 -
+                            {% endif %}
+                        
+                        </p>
+                        <span>Edytuj</span>
+                    </div>
                     <!-- <div class="btn mx-3 removeCategory" id="{{ expenseCategory.id }}" name="edit" value="Edit" onClick="deleteExpenseCategory(this.id)">Usuń</div> -->
                 </div>
             {% endfor %}
@@ -132,24 +234,51 @@
 </div>
 
 <div class="d-flex justify-content-center">
-    <div id="deleteExpenseCategory">
+    <!-- <div id="deleteExpenseCategory"> -->
+    <div id="addLimitDiv">
         <div class="container">
-            <form method="post" id="addIncomeForm" class="mt-3" action="/Profile/deleteExpenseCategory">
-                <div class="row justify-content-center"><div class = "h5 text-center">Czy usunąć pozycję?</div></div>
+            <!-- action="/Profile/setExpenseLimit" -->
+            <form method="post" id="editExpenseForm" class="mt-3" action="/Profile/setExpenseLimit" >
+                <div class="justify-content-center"><div id="setLimitFor" class = "h5 text-center">Ustaw limit dla</div></div>
                 
-                <div class="row justify-content-center">
-                    <input name="id" id="del-category-expense-id"/>
-                    <input type="text" class="form-control" placeholder="Nazwa" aria-label="Username" aria-describedby="basic-addon1">
-                    <label></label>
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">Ustawić limit dla kategorii?
-                    <input type="text" class="form-control" placeholder="Limit" aria-label="Username" aria-describedby="basic-addon1">
-                    <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
-                    <div class="mt-3 col d-flex justify-content-center" id="cancel">
-                        <div class="btn btn-danger" id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div>
+                <div class="justify-content-center">
+                    <input name="id" id="del-category-expense-id-limit"/>
+                    <input name = "name" id = "expense-category-name" type="text" class="form-control" placeholder="Nazwa" required>
+                    <div id="ErrorFormIncomeName"></div>
+                   
+                    
+                    <div class="form-check">
+                        <input  name = "setLimit" class="form-check-input" type="checkbox" id="setLimitCheckBox" onclick="activateLimit()">
+                        <label class="form-check-label" for="setLimitCheckBox">Ustawić limit dla kategorii?</label>
                     </div>
+                    
+                    <input  name = "limit" type="number" id="Limit" class="form-control" placeholder="Limit" aria-label="Limit"  step="0.01" aria-describedby="basic-addon1" disabled>
+                    
+                    <!-- <div class="mt-3 d-flex justify-content-center">
+                        <button class="btn btn-primary" type="submit" id="saveNameChangeAndLimitSet" value="" onClick="addLimit()">Zapisz zmiany</button>
+                    </div> -->
+                    <div class="mt-3 mb-3 d-flex justify-content-center">
+                        <button class="btn btn-primary" type="submit" id="saveNameChangeAndLimitSet" value="" onClick="addLimit()">Zapisz zmiany</button>
+                    </div>
+                    
+                    <!-- <div class="mt-3 d-flex justify-content-center"><input class="btn btn-danger" id="addIncome" type="submit" value="Usuń"></div> -->
+
                 </div>
                 
             </form>
+            <hr id ="line">
+            <form method="post" id="delete-Expense-Category" class="mt-3" action="/Profile/deleteExpenseCategory">
+                
+                <div class="justify-content-center"><div id="removeCategoryName" class = "h5 text-center">Czy usunąć kategorię?</div></div>
+                <div class="justify-content-center"><div id="sub-txt" class = "text-center">Usuwając kategorię usuniesz wszystkie operacje z nią zwiazane</div></div>
+                
+                <div class="justify-content-center">
+                    <input name="id" id="del-category-expense-id"/>
+                    <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
+                </div>
+                
+            </form>
+            <div class="mt-2 d-flex justify-content-center"><div class="btn btn-danger px-5 " id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div></div>
         </div>
     </div>
 </div>
@@ -160,12 +289,14 @@
         <div class="d-flex align-content-start flex-wrap">
             {% for paymentMethod in paymentMethods %}
                 <div class="justify-content-center">
-                    <div id="{{ paymentMethod.id }}" class="button-57 mx-1" value="Edit" onClick="deletePaymentMethod(this.id)"><span class=" text-nowrap text text-center">{{ paymentMethod.name }}</span><span>Usuń</span></div>
+                    <div id="{{ paymentMethod.id }}" class="button-57 mx-1" value="Edit" onClick="deletePaymentMethod(this.id)">
+                        <span class=" text-nowrap text text-center">{{ paymentMethod.name }}</span>
+                        <span>Edytuj</span>
+                    </div>
                 <!-- <div class="btn mx-3 removeCategory" id="{{ paymentMethod.id }}" name="edit" value="Edit" onClick="deletePaymentMethod(this.id)">Usuń</div> -->
             </div>
             {% endfor %}
         </div>
-        <!-- dodać walidację- czy już istnieje taka kategoria -->
         <form  method = "POST" id="addPaymentMethod" action="/Profile/addPaymentMethod">
             <div class="form-group mt-5">
                 <label for="inputMethod"><b>Dodaj nową metodę płatności</b></label>
@@ -177,6 +308,51 @@
 </div>
 
 <div class="d-flex justify-content-center">
+    <!-- <div id="deleteExpenseCategory"> -->
+    <div id="editPaymentMethodDiv">
+        <div class="container">
+            <!-- action="/Profile/setExpenseLimit" -->
+            <form method="post" id="changePaymentName" class="mt-3" action="/Profile/changePaymentMethodName" >
+                
+                <div class="justify-content-center">
+                    <div id="" class = "h5 text-center">Zmień nazwę</div>
+                </div>
+                
+                <div class="justify-content-center">
+                    <input name="id" id="edit-payment-method-id"/>
+                    <input name = "name" id = "payment-method-name" type="text" class="form-control" placeholder="Nazwa">
+                    
+                    <div class="mt-3 mb-3 d-flex justify-content-center">
+                        <button class="btn btn-primary" type="submit" id="saveNameChange" value="" onClick="">Zapisz zmiany</button>
+                    </div>
+                    
+                </div>
+                
+            </form>
+            <hr id ="line">
+            
+            <form method="post" id="delete-Payment-Method" class="mt-3" action="/Profile/deletePaymentMethod">
+                
+                <div class="justify-content-center">
+                    <div id="removePaymentMethodName" class = "h5 text-center">Czy usunąć Methodę?</div>
+                </div>
+                <div class="justify-content-center">
+                    <div id="sub-txt" class = "text-center">Usuwając metodę usuniesz wszystkie operacje z nią zwiazane</div>
+                </div>
+                
+                <div class="justify-content-center">
+                    <input name="id" id="del-payment-method-id"/>
+                    <div class="mt-3 col d-flex justify-content-center"><input class="btn btn-primary" id="addIncome" type="submit" value="Usuń"></div>
+                </div>
+                
+            </form>
+            <div class="mt-2 d-flex justify-content-center"><div class="btn btn-danger px-5 " id="exit-btn" value="Anuluj" onClick="closeWindow()">Anuluj</div></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="d-flex justify-content-center">
     <div id="deletePaymentMethod">
         <div class="container">
             <form method="post" id="delete-Payment-Method" class="mt-3" action="/Profile/deletePaymentMethod">
@@ -193,5 +369,5 @@
             </form>
         </div>
     </div>
-</div>
+</div> -->
 {% endblock %}

@@ -198,9 +198,11 @@ class Balance extends \Core\Model
         INNER JOIN payment_methods_assigned_to_users ON payment_methods_assigned_to_users.id = expenses.payment_method_assigned_to_user_id 
         WHERE expenses.user_id = '$loggedUserId' AND expenses.date_of_expense >= ' $this->startDate' AND expenses.date_of_expense <= '$this->endDate' ORDER BY expenses.date_of_expense DESC; " ;
 
-        $expenseCategoryQuery = "SELECT expenses.id, expenses.expense_category_assigned_to_user_id, sum(expenses.amount) As sum, expenses.date_of_expense, expenses_category_assigned_to_users.name FROM expenses 
+        $expenseCategoryQuery = "SELECT expenses.id, expenses.expense_category_assigned_to_user_id, sum(expenses.amount) As sum, expenses.date_of_expense, expenses_category_assigned_to_users.name 
+        FROM expenses 
         INNER JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id 
-        WHERE expenses.user_id = '$loggedUserId' AND expenses.date_of_expense >= ' $this->startDate' AND expenses.date_of_expense <= '$this->endDate' GROUP BY expenses.expense_category_assigned_to_user_id;";
+        WHERE expenses.user_id = '$loggedUserId' AND expenses.date_of_expense >= ' $this->startDate' AND expenses.date_of_expense <= '$this->endDate' 
+        GROUP BY expenses.expense_category_assigned_to_user_id;";
 
 //  
         

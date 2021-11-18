@@ -261,4 +261,31 @@ class Income extends \Core\Model
         return $stmt->execute();
     }
 
+    /**
+     * change income category name
+     * @return void
+     */
+    static public function changeIncomeCategoryName($data){
+        $incomeCategoryId = $data['id'];
+        $newCategoryName = $data['name'];
+        $user = Auth::getUser();
+        $loggedUserId = $user->id;
+
+        if (!Income::checkIfCategoryExists($newCategoryName, $loggedUserId)){
+            $sql = 'UPDATE incomes_category_assigned_to_users
+                    SET name = :name
+                    WHERE id = :id';
+
+            $db = static::getDB();
+                        
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':id', $incomeCategoryId, PDO::PARAM_INT);
+            $stmt->bindValue(':name', $newCategoryName, PDO::PARAM_STR);
+
+            return $stmt->execute();
+        }
+        
+        return false;
+    }
 }

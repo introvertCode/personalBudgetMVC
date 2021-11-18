@@ -8,6 +8,7 @@ use \App\Flash;
 use \App\Models\Income;
 use \App\Models\Expense;
 
+
 /**
  * Profile controller
  * 
@@ -62,8 +63,7 @@ class Profile extends Authenticated
         //$user = Auth::getUser();
 
         if($this->user->updateProfile($_POST)) {
-            Flash::addMessage('Changes saved');
-
+            Flash::addMessage('Zapisano zmiany');
             $this->redirect('/profile/show');
         } else {
             View::renderTemplate('Profile/edit.html', [
@@ -76,8 +76,8 @@ class Profile extends Authenticated
      * @return void
      */
     public function addIncomeCategoryAction(){
-        if (IncomeManager::addIncomeCategory($_POST)){
-            Flash::addMessage('Adding successful');
+        if (IncomeManager::addIncomeCategoryAction($_POST)){
+            Flash::addMessage('Dodano pomyślnie');
             $this->redirect('/profile/show');
            
         } else {
@@ -93,9 +93,12 @@ class Profile extends Authenticated
      * @return void
      */
     public function deleteIncomeCategoryAction(){
-        IncomeManager::deleteIncomeCategory($_POST);
-        $this->redirect('/profile/show');
-        Flash::addMessage('Usunięto pomyślnie');
+        if(IncomeManager::deleteIncomeCategoryAction($_POST)){
+            Flash::addMessage('Usunięto pomyślnie');
+            $this->redirect('/profile/show');
+           
+        }
+       
     }
 
     /**
@@ -104,13 +107,13 @@ class Profile extends Authenticated
      */
     public function addExpenseCategoryAction(){
         if (ExpenseManager::addExpenseCategory($_POST)){
-            Flash::addMessage('Adding successful');
+            Flash::addMessage('Dodano pomyślnie');
             $this->redirect('/profile/show');
            
         } else {
             Flash::addMessage('Taka kategoria już istnieje','warning');
             $this->redirect('/profile/show');
-            echo "już istnieje taka kategoria";
+            // echo "już istnieje taka kategoria";
             
         }
     }
@@ -121,8 +124,9 @@ class Profile extends Authenticated
      */
     public function deleteExpenseCategoryAction(){
         ExpenseManager::deleteExpenseCategory($_POST);
-        $this->redirect('/profile/show');
         Flash::addMessage('Usunięto pomyślnie');
+        $this->redirect('/profile/show');
+        
     }
 
     /**
@@ -131,21 +135,62 @@ class Profile extends Authenticated
      */
     public function deletePaymentMethodAction(){
         ExpenseManager::deletePaymentMethod($_POST);
-        $this->redirect('/profile/show');
         Flash::addMessage('Usunięto pomyślnie');
+        $this->redirect('/profile/show');
+       
     }
 
     public function addPaymentMethodAction(){
         if (ExpenseManager::addPaymentMethod($_POST)){
-            Flash::addMessage('Adding successful');
+            Flash::addMessage('Dodano pomyślnie');
             $this->redirect('/profile/show');
            
         } else {
             Flash::addMessage('Taka kategoria już istnieje','warning');
             $this->redirect('/profile/show');
-            echo "już istnieje taka kategoria";
+            // echo "już istnieje taka kategoria";
             
         }
     }
 
-}
+    public function setExpenseLimitAction(){
+        // $this->redirect('/profile/show');
+       if (ExpenseManager::setLimit($_POST)){
+            // $this->redirect('/profile/show');
+            return true;
+       } else {
+           return false;
+       }
+    //    Flash::addMessage('Zmieniono pomyślnie');
+    }
+
+    /**
+     * Change income category name
+     * @return void
+     */
+    public function changeIncomeCategoryNameAction(){
+        if (IncomeManager::changeIncomeCategoryNameAction($_POST)){
+            Flash::addMessage('Zmieniono pomyślnie');
+            $this->redirect('/profile/show');
+        } else {
+            Flash::addMessage('Taka kategoria już istnieje','warning');
+            $this->redirect('/profile/show');
+        }
+       
+    }
+   
+    /**
+     * Change payment method name
+     * @return void
+     */
+    public function changePaymentMethodNameAction(){
+        if (ExpenseManager::changePaymentMethodName($_POST)){
+            Flash::addMessage('Zmieniono pomyślnie');
+            $this->redirect('/profile/show');
+        } else {
+            Flash::addMessage('Taka kategoria już istnieje','warning');
+            $this->redirect('/profile/show');
+        }
+       
+    }
+}   

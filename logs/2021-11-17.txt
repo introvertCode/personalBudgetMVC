@@ -1,0 +1,101 @@
+[17-Nov-2021 22:25:30 Europe/Berlin] Uncaught exception: 'Exception'with message 'No route matched.'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('prod')
+#1 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php' on line 146
+[17-Nov-2021 22:26:00 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method showfAction not found in controller App\Controllers\Menu'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('showf', Array)
+#1 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('menu/showf')
+#2 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php' on line 28
+[17-Nov-2021 22:26:00 Europe/Berlin] PHP Fatal error:  Uncaught Twig\Error\LoaderError: Unable to find template "500.html" (looked into: ../App/Views). in G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php:227
+Stack trace:
+#0 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php(131): Twig\Loader\FilesystemLoader->findTemplate('500.html')
+#1 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(261): Twig\Loader\FilesystemLoader->getCacheKey('500.html')
+#2 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(309): Twig\Environment->getTemplateClass('500.html')
+#3 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(277): Twig\Environment->load('500.html')
+#4 G:\programy\XAMPP\htdocs\phpMVC\Core\View.php(59): Twig\Environment->render('500.html', Array)
+#5 G:\programy\XAMPP\htdocs\phpMVC\Core\View.php(30): Core\View::getTemplate('500.html', Array)
+#6 G:\programy\XAMPP\htdocs\phpMVC\Core\Error.php(60): Core\View::renderTemplate('500.html')
+#7 [internal function]: Core\Error::exceptionHandler(Object(Exception))
+#8 {main}
+  thrown in G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php on line 227
+[17-Nov-2021 22:26:44 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method showfAction not found in controller App\Controllers\Menu'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('showf', Array)
+#1 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('menu/showf')
+#2 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php' on line 28
+[17-Nov-2021 22:26:44 Europe/Berlin] PHP Fatal error:  Uncaught Twig\Error\LoaderError: Unable to find template "500.html" (looked into: ../App/Views). in G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php:227
+Stack trace:
+#0 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php(131): Twig\Loader\FilesystemLoader->findTemplate('500.html')
+#1 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(261): Twig\Loader\FilesystemLoader->getCacheKey('500.html')
+#2 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(309): Twig\Environment->getTemplateClass('500.html')
+#3 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(277): Twig\Environment->load('500.html')
+#4 G:\programy\XAMPP\htdocs\phpMVC\Core\View.php(59): Twig\Environment->render('500.html', Array)
+#5 G:\programy\XAMPP\htdocs\phpMVC\Core\View.php(30): Core\View::getTemplate('500.html', Array)
+#6 G:\programy\XAMPP\htdocs\phpMVC\Core\Error.php(60): Core\View::renderTemplate('500.html')
+#7 [internal function]: Core\Error::exceptionHandler(Object(Exception))
+#8 {main}
+  thrown in G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php on line 227
+[17-Nov-2021 22:27:03 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method showfAction not found in controller App\Controllers\Menu'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('showf', Array)
+#1 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('menu/showf')
+#2 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php' on line 28
+[17-Nov-2021 22:27:03 Europe/Berlin] PHP Fatal error:  Uncaught Twig\Error\LoaderError: Unable to find template "500.html" (looked into: ../App/Views). in G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php:227
+Stack trace:
+#0 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php(131): Twig\Loader\FilesystemLoader->findTemplate('500.html')
+#1 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(261): Twig\Loader\FilesystemLoader->getCacheKey('500.html')
+#2 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(309): Twig\Environment->getTemplateClass('500.html')
+#3 G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Environment.php(277): Twig\Environment->load('500.html')
+#4 G:\programy\XAMPP\htdocs\phpMVC\Core\View.php(59): Twig\Environment->render('500.html', Array)
+#5 G:\programy\XAMPP\htdocs\phpMVC\Core\View.php(30): Core\View::getTemplate('500.html', Array)
+#6 G:\programy\XAMPP\htdocs\phpMVC\Core\Error.php(60): Core\View::renderTemplate('500.html')
+#7 [internal function]: Core\Error::exceptionHandler(Object(Exception))
+#8 {main}
+  thrown in G:\programy\XAMPP\htdocs\phpMVC\vendor\twig\twig\src\Loader\FilesystemLoader.php on line 227
+[17-Nov-2021 22:27:20 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method showfAction not found in controller App\Controllers\Menu'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('showf', Array)
+#1 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('menu/showf')
+#2 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php' on line 28
+[17-Nov-2021 22:30:44 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method showfAction not found in controller App\Controllers\Menu'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('showf', Array)
+#1 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('menu/showf')
+#2 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php' on line 28
+[17-Nov-2021 22:30:44 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method showfAction not found in controller App\Controllers\Menu'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('showf', Array)
+#1 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('menu/showf')
+#2 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php' on line 28
+[17-Nov-2021 22:31:39 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method adddAction not found in controller App\Controllers\BalanceManager'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('addd', Array)
+#1 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('BalanceManager/...')
+#2 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php' on line 28
+[17-Nov-2021 22:35:09 Europe/Berlin] Uncaught exception: 'Exception'with message 'No route matched.'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('favicon.ico')
+#1 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php' on line 146
+[17-Nov-2021 22:35:38 Europe/Berlin] Uncaught exception: 'ErrorException'with message 'Undefined array key "id"'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\App\Models\Expense.php(526): Core\Error::errorHandler(2, 'Undefined array...', 'G:\\programy\\XAM...', 526)
+#1 G:\programy\XAMPP\htdocs\phpMVC\App\Controllers\ExpenseManager.php(130): App\Models\Expense::setLimit(Array)
+#2 G:\programy\XAMPP\htdocs\phpMVC\App\Controllers\Profile.php(158): App\Controllers\ExpenseManager::setLimit(Array)
+#3 [internal function]: App\Controllers\Profile->setExpenseLimitAction()
+#4 G:\programy\XAMPP\htdocs\phpMVC\Core\Controller.php(23): call_user_func_array(Array, Array)
+#5 G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php(134): Core\Controller->__call('setExpenseLimit', Array)
+#6 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('Profile/setExpe...')
+#7 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\App\Models\Expense.php' on line 526
+[17-Nov-2021 22:38:11 Europe/Berlin] Uncaught exception: 'Exception'with message 'Method setExpenseLimitAction (in controller App\Controllers\Profile) not found'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('Profile/setExpe...')
+#1 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php' on line 138
+[17-Nov-2021 22:40:27 Europe/Berlin] Uncaught exception: 'Exception'with message 'No route matched.'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('favicon.ico')
+#1 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php' on line 146
+[17-Nov-2021 22:41:00 Europe/Berlin] Uncaught exception: 'Exception'with message 'No route matched.'
+Stacktrace: #0 G:\programy\XAMPP\htdocs\phpMVC\public\index.php(72): Core\Router->dispatch('Profile/')
+#1 {main}
+Thrown in 'G:\programy\XAMPP\htdocs\phpMVC\Core\Router.php' on line 146
