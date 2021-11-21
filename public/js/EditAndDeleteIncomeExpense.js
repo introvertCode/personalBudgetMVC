@@ -235,8 +235,8 @@ function addLimit() {
             }
         
 
-
-        if (name.length < 1 || limit < -1 || limit > 99999999999) {
+            
+        if (name.length < 1 || limit < -1 || limit > 99999999999 || isNaN(limit)) {
             return;
         } else {
 

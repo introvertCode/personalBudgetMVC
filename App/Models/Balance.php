@@ -89,50 +89,27 @@ class Balance extends \Core\Model
     }
 
     /**
-     * set Incomes
-     * @return Arr
+     * set Incomes Category in object to show
      */
-    public function setIncomes(){
-        
+    public function setIncomesCategory(){
+
         $this->getDate();
         $this->user = Auth::getUser();
         $loggedUserId = $this->user->id;
         $db = static::getDB();
 
-        $incomeQuery = "SELECT incomes.id, incomes.income_category_assigned_to_user_id, incomes.amount, incomes.date_of_income, incomes.income_comment, incomes_category_assigned_to_users.name FROM incomes INNER JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id  WHERE incomes.user_id = '$loggedUserId' AND incomes.date_of_income >= ' $this->startDate'AND incomes.date_of_income <= '$this->endDate' ORDER BY incomes.date_of_income DESC; " ;
-        
         $incomeCategoryQuery = "SELECT incomes.id, incomes.income_category_assigned_to_user_id, sum(incomes.amount) As sum, incomes.date_of_income, incomes_category_assigned_to_users.name FROM incomes INNER JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id  WHERE incomes.user_id = '$loggedUserId' AND incomes.date_of_income >= ' $this->startDate'AND incomes.date_of_income <= '$this->endDate' GROUP BY incomes.income_category_assigned_to_user_id ;" ;
 
-        $incomeQueryStmt = $db->prepare($incomeQuery);
         $incomeCategoryQueryStmt = $db->prepare($incomeCategoryQuery);
 
-        $incomeQueryStmt->execute();
-        $incomeRecords = $incomeQueryStmt->rowCount();
-        $this->incomeRecords = $incomeRecords;
         $incomeCategoryQueryStmt->execute();
         $incomeCategoryRecords = $incomeCategoryQueryStmt->rowCount();
         $this->incomeCategoryRecords = $incomeCategoryRecords;
 
-        $incomeQueryStmt->setFetchMode(PDO::FETCH_OBJ);
         $incomeCategoryQueryStmt->setFetchMode(PDO::FETCH_OBJ);
-       
-        $this->incomes = $incomeQueryStmt->fetchAll();
+
         $this->incomesCategory = $incomeCategoryQueryStmt->fetchAll();
-        
-        // print("<pre>".print_r($this->incomesCategory,true)."</pre>");
 
-        $this->sumOfIncomes = 0;
-        if ($incomeRecords>=1) {
-                    
-
-            for ($i = 0; $i < $incomeRecords; $i++) {        
-                $incomeAmount =  $this->incomes[$i]->amount;
-                $this->sumOfIncomes += $incomeAmount;
-                // $incomesArray[$a2]= $a3;              
-            }
-        }
-        //  echo $this->sumOfIncomes;
-        // $incomesAmountArray[]= null;
         $this->incomesAmountArray = 0;
         $this->incomesCategoryArray = 0;
          for ($i = 0; $i < $incomeCategoryRecords; $i++) {
@@ -153,17 +130,60 @@ class Balance extends \Core\Model
             // setcookie("incomesCategoryArray", json_encode($incomesCategoryArray));
 
         }
-        // $this->incomesAmountArray = $incomesAmountArray;
-        // print("<pre>".print_r($incomesAmountArray,true)."</pre>");
-        // print("<pre>".print_r($incomesCategoryArray,true)."</pre>");
-        
-        // setcookie("sumOfIncomes", json_encode($this->sumOfIncomes));  
-             
-       
-        // setcookie("incomeCategoryRecords", json_encode($incomeCategoryRecords));
+    }
 
+    /**
+     * set sum of incomes to show
+     */
+    public function setSumOfIncomes(){
+        $this->getDate();
+        $this->user = Auth::getUser();
+        $loggedUserId = $this->user->id;
+        $db = static::getDB();
+
+        $incomeQuery = "SELECT incomes.id, incomes.income_category_assigned_to_user_id, incomes.amount, incomes.date_of_income, incomes.income_comment, incomes_category_assigned_to_users.name FROM incomes INNER JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id  WHERE incomes.user_id = '$loggedUserId' AND incomes.date_of_income >= ' $this->startDate'AND incomes.date_of_income <= '$this->endDate' ORDER BY incomes.date_of_income DESC; " ;
         
+       
+
+        $incomeQueryStmt = $db->prepare($incomeQuery);
+       
+
+        $incomeQueryStmt->execute();
+        $incomeRecords = $incomeQueryStmt->rowCount();
+        $this->incomeRecords = $incomeRecords;
+       
+
+        $incomeQueryStmt->setFetchMode(PDO::FETCH_OBJ);
+       
+       
+        $this->incomes = $incomeQueryStmt->fetchAll();
+       
         
+        // print("<pre>".print_r($this->incomesCategory,true)."</pre>");
+
+        $this->sumOfIncomes = 0;
+        if ($incomeRecords>=1) {
+                    
+
+            for ($i = 0; $i < $incomeRecords; $i++) {        
+                $incomeAmount =  $this->incomes[$i]->amount;
+                $this->sumOfIncomes += $incomeAmount;
+                // $incomesArray[$a2]= $a3;              
+            }
+        }
+    }
+
+
+    
+    
+    /**
+     * set Incomes
+     * @return Arr
+     */
+    public function setIncomes(){
+        
+       $this->setIncomesCategory();
+       $this->setSumOfIncomes();
     }
 
 
@@ -181,22 +201,14 @@ class Balance extends \Core\Model
     }
     
     /**
-     * Set expenses
-     * 
-     * @return void
+     * set Expense Category
+     * @return
      */
-    public function setExpenses(){
-        // $this->getDate();
+    public function setExpenseCategory() {
+
         $this->user = Auth::getUser();
         $loggedUserId = $this->user->id;
         $db = static::getDB();
-
-        // $expenseQuery = "SELECT expenses.id, expenses.expense_category_assigned_to_user_id, expenses.amount, expenses.date_of_expense, expenses.expense_comment, expenses_category_assigned_to_users.name FROM expenses INNER JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id WHERE expenses.user_id = '$loggedUserId' AND expenses.date_of_expense >= ' $this->startDate' AND expenses.date_of_expense <= '$this->endDate'; " ;
-
-        $expenseQuery = "SELECT expenses.id, expenses.expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, expenses.amount, expenses.date_of_expense, expenses.expense_comment, expenses_category_assigned_to_users.name, payment_methods_assigned_to_users.name As payment_method FROM expenses 
-        INNER JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id 
-        INNER JOIN payment_methods_assigned_to_users ON payment_methods_assigned_to_users.id = expenses.payment_method_assigned_to_user_id 
-        WHERE expenses.user_id = '$loggedUserId' AND expenses.date_of_expense >= ' $this->startDate' AND expenses.date_of_expense <= '$this->endDate' ORDER BY expenses.date_of_expense DESC; " ;
 
         $expenseCategoryQuery = "SELECT expenses.id, expenses.expense_category_assigned_to_user_id, sum(expenses.amount) As sum, expenses.date_of_expense, expenses_category_assigned_to_users.name 
         FROM expenses 
@@ -204,37 +216,17 @@ class Balance extends \Core\Model
         WHERE expenses.user_id = '$loggedUserId' AND expenses.date_of_expense >= ' $this->startDate' AND expenses.date_of_expense <= '$this->endDate' 
         GROUP BY expenses.expense_category_assigned_to_user_id;";
 
-//  
-        
-        $expenseQueryStmt = $db->prepare($expenseQuery);
         $expenseCategoryQueryStmt = $db->prepare($expenseCategoryQuery);
 
-        $expenseQueryStmt->execute();
-        $expenseRecords = $expenseQueryStmt->rowCount();
-        $this->expenseRecords = $expenseRecords;
         $expenseCategoryQueryStmt->execute();
         $expenseCategoryRecords = $expenseCategoryQueryStmt->rowCount();
         $this->expenseCategoryRecords = $expenseCategoryRecords;
 
-        $expenseQueryStmt->setFetchMode(PDO::FETCH_OBJ);
         $expenseCategoryQueryStmt->setFetchMode(PDO::FETCH_OBJ);
-        // $incomeCategoryQueryStmt->setFetchMode(PDO::FETCH_OBJ);       
 
-        $this->expenses = $expenseQueryStmt->fetchAll();
         $this->expensesCategory = $expenseCategoryQueryStmt->fetchAll();
-        // print("<pre>".print_r($this->expenses,true)."</pre>");
 
-        $this->sumOfExpenses = 0;
-        if ($expenseRecords>=1) {
-                    
-            for ($i = 0; $i < $expenseRecords; $i++) {        
-                $expenseAmount =  $this->expenses[$i]->amount;
-                $this->sumOfExpenses += $expenseAmount;
-                // $incomesArray[$a2]= $a3;              
-            }
-        }
-         // echo $this->sumOfIncomes;
-         $this->expensesAmountArray = 0;
+        $this->expensesAmountArray = 0;
          $this->expensesCategoryArray = 0;
          for ($i = 0; $i < $expenseCategoryRecords; $i++) {
             
@@ -253,12 +245,61 @@ class Balance extends \Core\Model
             // setcookie("expensesCategoryArray", json_encode($expensesCategoryArray));
 
         }
-        // print("<pre>".print_r($incomesAmountArray,true)."</pre>");
-        // print("<pre>".print_r($incomesCategoryArray,true)."</pre>");
+
+    }
+
+    /**
+     * set sum of expenses
+     * @return void
+     */
+    public function setSumOfExpenses(){
+        $this->user = Auth::getUser();
+        $loggedUserId = $this->user->id;
+        $db = static::getDB();
+
+       
+        $expenseQuery = "SELECT expenses.id, expenses.expense_category_assigned_to_user_id, payment_method_assigned_to_user_id, expenses.amount, expenses.date_of_expense, expenses.expense_comment, expenses_category_assigned_to_users.name, payment_methods_assigned_to_users.name As payment_method FROM expenses 
+        INNER JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id 
+        INNER JOIN payment_methods_assigned_to_users ON payment_methods_assigned_to_users.id = expenses.payment_method_assigned_to_user_id 
+        WHERE expenses.user_id = '$loggedUserId' AND expenses.date_of_expense >= ' $this->startDate' AND expenses.date_of_expense <= '$this->endDate' ORDER BY expenses.date_of_expense DESC; " ;
+
         
-        // setcookie("sumOfExpenses", json_encode($this->sumOfExpenses));
         
-        // setcookie("expenseCategoryRecords", json_encode($expenseCategoryRecords));
+        $expenseQueryStmt = $db->prepare($expenseQuery);
+       
+        $expenseQueryStmt->execute();
+        $expenseRecords = $expenseQueryStmt->rowCount();
+        $this->expenseRecords = $expenseRecords;
+        
+       
+
+        $expenseQueryStmt->setFetchMode(PDO::FETCH_OBJ);
+      
+        $this->expenses = $expenseQueryStmt->fetchAll();
+       
+
+        $this->sumOfExpenses = 0;
+        if ($expenseRecords>=1) {
+                    
+            for ($i = 0; $i < $expenseRecords; $i++) {        
+                $expenseAmount =  $this->expenses[$i]->amount;
+                $this->sumOfExpenses += $expenseAmount;          
+            }
+        }
+    }
+    
+    
+    
+    /**
+     * Set expenses
+     * 
+     * @return void
+     */
+    public function setExpenses(){
+        // $this->getDate();
+        
+        $this->setExpenseCategory();
+        $this->setSumOfExpenses();
 
     }
 
