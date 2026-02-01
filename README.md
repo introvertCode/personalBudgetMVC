@@ -1,4 +1,4 @@
-This webapplication is used for tracking your personal incomes and expenses. It allows you to see all your transactions and balance from selected period.
+This web application is used for tracking your personal incomes and expenses. It allows you to see all your transactions and balance from selected period.
 Features:
 -adding expenses and incomes
 -adding/removing categories
